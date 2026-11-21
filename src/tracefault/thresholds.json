@@ -1,0 +1,12 @@
+{
+  "thresholds": {
+    "budget_exhaustion.ratio": 1.0,
+    "context_overflow.drop_ratio": 0.6,
+    "context_overflow.near_ratio": 0.85,
+    "repeated_calls.min_repeats": 3,
+    "timeout.ratio": 1.0,
+    "tool_error_loop.min_errors": 3,
+    "wrong_tool.min_offtask": 2
+  },
+  "tuned_on_seed": 1
+}
