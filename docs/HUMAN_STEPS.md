@@ -2,10 +2,10 @@
 
 Only Shreyas can do these. Do them in order.
 
-Release commit: RELEASE_SHA on branch `claude/project-thread-n3u3hh`.
+Release commit: 2990d44294cc605792705758c3e0cdbc1ff3b1ab on branch `claude/project-thread-n3u3hh`.
 
 1. Open a pull request from `claude/project-thread-n3u3hh` into `main` on GitHub. Read the diff. Merge with a merge commit, so the release commit stays in the history of `main`. The project coordinator may already have done this.
-2. Create the tag on the release commit. Either run `git fetch origin`, then `git tag -a v0.1.0-rc1 RELEASE_SHA -m "Release candidate 1"`, then `git push origin v0.1.0-rc1`, or create a pre-release with that tag on the GitHub releases page. The coordinator may already have done this.
+2. Create the tag on the release commit. Either run `git fetch origin`, then `git tag -a v0.1.0-rc1 2990d44294cc605792705758c3e0cdbc1ff3b1ab -m "Release candidate 1"`, then `git push origin v0.1.0-rc1`, or create a pre-release with that tag on the GitHub releases page. The coordinator may already have done this.
 3. Run the secret scan once more: `gitleaks git -v .` in a fresh clone.
 4. Check that the CI run on the merge commit is green on the Actions page. The build agent ran every CI step locally and could not read the Actions page.
 5. Make the repo public when you are ready. All history becomes public at that moment.

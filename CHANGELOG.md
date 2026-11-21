@@ -2,7 +2,7 @@
 
 ## v0.1.0-rc1 (2026-11-21)
 
-Release commit: to be filled in at hand-off.
+Release commit: 2990d44294cc605792705758c3e0cdbc1ff3b1ab (pre-release tag v0.1.0-rc1 goes on this commit).
 
 - Converters for OTLP JSON with GenAI attributes and for JSON Lines, into one internal model.
 - Seeded trace generator with eight planted failure types and ground truth.
