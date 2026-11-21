@@ -60,7 +60,11 @@ Field names are pinned to: open-telemetry/semantic-conventions-genai main branch
 
 The failures in this benchmark are planted by a generator. Real traces can fail in other ways. The generator and the rules were written by the same agent, so a high score here shows that the rules catch the faults as the generator plants them. It does not show how they do on your traces.
 
-Clean traces carry benign noise on purpose: one retry after a tool error, two identical status polls (rarely three), one exploratory call outside the task list, slow calls that still finish in time, a context near its limit without truncation, a summary step that shrinks the context, and spend up to 97 percent of the budget. About 15 percent of traces leave out one declared limit. These rates are generator settings in `src/tracefault/generate.py`, not results.
+Clean traces carry benign noise on purpose: one retry after a tool error, two identical status polls (rarely three), one exploratory call outside the task list, slow calls that still finish in time, a context near its limit without truncation, a summary step that shrinks the context, and spend close to the budget without reaching it.
+
+<!-- gen:noise -->
+Two generator settings shape these numbers. Clean traces spend up to 97 percent of the budget (`CLEAN_SPEND_MAX`). About 15 percent of traces leave out one declared limit (`MISSING_P`). Both live in `src/tracefault/generate.py`. They are settings, not results.
+<!-- /gen:noise -->
 
 <!-- gen:results -->
 Run of 2026-11-21, model: none (rule detectors, synthetic traces), held-out seed 2026, file `results/final-seed2026.json`.
@@ -103,7 +107,7 @@ The alert trade-off shows in two rows. `wrong_tool` waits for two calls outside 
 
 <!-- gen:cost -->
 Cost per task: $0.00. tracefault calls no model and no API.
-The held-out bench (1600 traces, both converters, eight detectors and clustering) took 0.78 s on 1 core of an Intel(R) Xeon(R) Processor @ 2.10GHz, Python 3.11.18, on 2026-11-21. That is about 0.49 ms per trace.
+The held-out bench (1600 traces, both converters, eight detectors and clustering) took 0.82 s on 1 core of an Intel(R) Xeon(R) Processor @ 2.10GHz (pinned with `taskset -c 0`), Python 3.11.18, on 2026-11-21. That is about 0.51 ms per trace.
 <!-- /gen:cost -->
 
 ## Run it in 10 minutes

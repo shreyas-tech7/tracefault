@@ -183,6 +183,7 @@
     "cores_used": 1,
     "cost_usd": 0.0,
     "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+    "cpus_allowed": 1,
     "date": "2026-11-21",
     "fault_mix": {
       "budget_exhaustion": 150,
@@ -197,7 +198,7 @@
     "fault_traces": 1200,
     "model": "none (rule detectors, synthetic traces)",
     "python": "3.11.18",
-    "seconds": 0.78,
+    "seconds": 0.82,
     "seed": 2026,
     "thresholds": {
       "budget_exhaustion.ratio": 1.0,

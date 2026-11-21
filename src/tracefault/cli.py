@@ -149,7 +149,11 @@ def cmd_readme(a: argparse.Namespace) -> int:
     if a.check and stale:
         print("out of date: " + ", ".join(stale), file=sys.stderr)
         return FOUND
-    print("generated files are up to date" if a.check else "wrote README.md and docs/index.html")
+    print(
+        "generated files are up to date"
+        if a.check
+        else "wrote README.md, docs/index.html and docs/INTERVIEW_QA.md"
+    )
     return OK
 
 

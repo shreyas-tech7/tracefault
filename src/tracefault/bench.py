@@ -9,6 +9,7 @@ from __future__ import annotations
 import datetime as dt
 import json
 import math
+import os
 import platform
 import time
 from collections import Counter
@@ -159,6 +160,7 @@ def run_bench(
             "seconds": round(secs, 2),
             "cpu": _cpu(),
             "cores_used": 1,
+            "cpus_allowed": len(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else None,
             "python": platform.python_version(),
             "cost_usd": 0.0,
         },

@@ -56,6 +56,7 @@ UNKNOWN_ERRORS = ["unknown tool '{t}'", "Tool {t} not found", "no such function:
 LIMITS = (8192, 16384, 32768)
 EPOCH = 1_767_225_600  # 2026-01-01T00:00:00Z
 MISSING_P = 0.15
+CLEAN_SPEND_MAX = 0.97
 
 
 @dataclass
@@ -326,7 +327,7 @@ def _render(rng: random.Random, p: Plan, fault: str | None, idx: int) -> Trace:
     if fault == "budget_exhaustion":
         budget = int(total / rng.uniform(1.0, 1.3) // 100 * 100)
     else:
-        budget = int((total / rng.uniform(0.5, 0.97)) // 100 * 100 + 100)
+        budget = int((total / rng.uniform(0.5, CLEAN_SPEND_MAX)) // 100 * 100 + 100)
     available = sorted({x for v in TASKS.values() for x in v} | set(HELPERS))
     conf = {
         "gen_ai.agent.name": f"{p.task}_agent",

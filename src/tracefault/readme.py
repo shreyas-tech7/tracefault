@@ -11,6 +11,7 @@ import json
 import re
 from pathlib import Path
 
+from .generate import CLEAN_SPEND_MAX, MISSING_P
 from .model import OTEL_VERSION
 
 FINAL = "results/final-seed2026.json"
@@ -100,11 +101,12 @@ def blocks(root: Path) -> dict[str, str]:
         )
         rules.append(f"| `{k}` | {txt} | {src} |")
     per = 1000 * m["seconds"] / m["traces"]
+    pin = " (pinned with `taskset -c 0`)" if m.get("cpus_allowed") == 1 else ""
     cost = "\n".join(
         [
             f"Cost per task: ${m['cost_usd']:.2f}. tracefault calls no model and no API.",
             f"The held-out bench ({m['traces']} traces, both converters, eight detectors and clustering) took "
-            f"{m['seconds']} s on {m['cores_used']} core of an {m['cpu']}, Python {m['python']}, on {m['date']}. "
+            f"{m['seconds']} s on {m['cores_used']} core of an {m['cpu']}{pin}, Python {m['python']}, on {m['date']}. "
             f"That is about {per:.2f} ms per trace.",
         ]
     )
@@ -113,7 +115,33 @@ def blocks(root: Path) -> dict[str, str]:
         f"({m['date']}, {m['model']}, seed {m['seed']})."
     )
     otel = f"Field names are pinned to: {OTEL_VERSION}"
-    return {"status": status, "results": results, "cost": cost, "rules": "\n".join(rules), "otel": otel}
+    bt = final["by_type"]
+    qa = "\n".join(
+        [
+            f"Numbers from `{FINAL}` (seed {m['seed']}, {m['date']}):",
+            "",
+            f"- wrong tool recall: {pct(bt['wrong_tool']['recall'])}, precision {pct(bt['wrong_tool']['precision'])}",
+            f"- repeated calls precision: {pct(bt['repeated_calls']['precision'])}",
+            f"- tool error loop precision: {pct(bt['tool_error_loop']['precision'])}",
+            f"- clean traces flagged by any detector: {pct(final['clean_flagged'])}",
+            f"- cluster purity: {pct(final['clusters']['purity'])} over {final['clusters']['count']} clusters",
+            f"- time per trace: about {per:.2f} ms on one core",
+        ]
+    )
+    noise = (
+        f"Two generator settings shape these numbers. Clean traces spend up to {100 * CLEAN_SPEND_MAX:.0f} percent "
+        f"of the budget (`CLEAN_SPEND_MAX`). About {100 * MISSING_P:.0f} percent of traces leave out one declared "
+        "limit (`MISSING_P`). Both live in `src/tracefault/generate.py`. They are settings, not results."
+    )
+    return {
+        "noise": noise,
+        "status": status,
+        "results": results,
+        "cost": cost,
+        "rules": "\n".join(rules),
+        "otel": otel,
+        "qa": qa,
+    }
 
 
 def render_readme(text: str, gen: dict[str, str]) -> str:
@@ -171,6 +199,9 @@ def write(root: Path, check: bool = False) -> list[str]:
     readme = root / "README.md"
     new = render_readme(readme.read_text(), gen)
     targets = {readme: new, root / "docs" / "index.html": render_html(root)}
+    qa = root / "docs" / "INTERVIEW_QA.md"
+    if qa.exists():
+        targets[qa] = render_readme(qa.read_text(), gen)
     for path, text in targets.items():
         old = path.read_text() if path.exists() else ""
         if old != text:
@@ -184,4 +215,4 @@ def write(root: Path, check: bool = False) -> list[str]:
     return stale
 
 
-BLOCK_NAMES = ("status", "results", "cost", "rules", "otel")
+BLOCK_NAMES = ("status", "results", "cost", "rules", "otel", "noise")
