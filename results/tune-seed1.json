@@ -1,0 +1,120 @@
+{
+  "n_traces": 1600,
+  "sweep": {
+    "budget_exhaustion.ratio": {
+      "f1": [
+        0.583826,
+        0.860465,
+        0.993289,
+        0.924731
+      ],
+      "picked": 1.0,
+      "values": [
+        0.9,
+        0.95,
+        1.0,
+        1.05
+      ]
+    },
+    "context_overflow.drop_ratio": {
+      "f1": [
+        0.970297,
+        0.980392,
+        0.980392,
+        0.980392,
+        0.980392
+      ],
+      "picked": 0.6,
+      "values": [
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8
+      ]
+    },
+    "context_overflow.near_ratio": {
+      "f1": [
+        0.952381,
+        0.980392,
+        0.909091,
+        0.654709
+      ],
+      "picked": 0.85,
+      "values": [
+        0.8,
+        0.85,
+        0.9,
+        0.95
+      ]
+    },
+    "repeated_calls.min_repeats": {
+      "f1": [
+        0.641026,
+        0.946372,
+        0.888889,
+        0.689956
+      ],
+      "picked": 3,
+      "values": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "timeout.ratio": {
+      "f1": [
+        0.911854,
+        1.0,
+        1.0,
+        0.965517
+      ],
+      "picked": 1.0,
+      "values": [
+        0.9,
+        0.95,
+        1.0,
+        1.05
+      ]
+    },
+    "tool_error_loop.min_errors": {
+      "f1": [
+        0.791557,
+        0.986842,
+        0.928571,
+        0.77551
+      ],
+      "picked": 3,
+      "values": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "wrong_tool.min_offtask": {
+      "f1": [
+        0.679157,
+        0.787149,
+        0.484848
+      ],
+      "picked": 2,
+      "values": [
+        1,
+        2,
+        3
+      ]
+    }
+  },
+  "thresholds": {
+    "budget_exhaustion.ratio": 1.0,
+    "context_overflow.drop_ratio": 0.6,
+    "context_overflow.near_ratio": 0.85,
+    "repeated_calls.min_repeats": 3,
+    "timeout.ratio": 1.0,
+    "tool_error_loop.min_errors": 3,
+    "wrong_tool.min_offtask": 2
+  },
+  "tune_seed": 1
+}

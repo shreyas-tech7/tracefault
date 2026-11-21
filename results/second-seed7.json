@@ -1,0 +1,216 @@
+{
+  "by_type": {
+    "budget_exhaustion": {
+      "fn": 1,
+      "fp": 0,
+      "precision": {
+        "hi": 1.0,
+        "k": 149,
+        "lo": 0.9748654816489752,
+        "n": 149,
+        "rate": 1.0
+      },
+      "recall": {
+        "hi": 0.9988222289768665,
+        "k": 149,
+        "lo": 0.9632062470660241,
+        "n": 150,
+        "rate": 0.9933333333333333
+      },
+      "tp": 149
+    },
+    "context_overflow": {
+      "fn": 0,
+      "fp": 6,
+      "precision": {
+        "hi": 0.9822558098198803,
+        "k": 150,
+        "lo": 0.9186360731442541,
+        "n": 156,
+        "rate": 0.9615384615384616
+      },
+      "recall": {
+        "hi": 1.0,
+        "k": 150,
+        "lo": 0.9750288608542812,
+        "n": 150,
+        "rate": 1.0
+      },
+      "tp": 150
+    },
+    "handoff_drop": {
+      "fn": 0,
+      "fp": 0,
+      "precision": {
+        "hi": 1.0,
+        "k": 150,
+        "lo": 0.9750288608542812,
+        "n": 150,
+        "rate": 1.0
+      },
+      "recall": {
+        "hi": 1.0,
+        "k": 150,
+        "lo": 0.9750288608542812,
+        "n": 150,
+        "rate": 1.0
+      },
+      "tp": 150
+    },
+    "repeated_calls": {
+      "fn": 0,
+      "fp": 25,
+      "precision": {
+        "hi": 0.9013279304812358,
+        "k": 150,
+        "lo": 0.7976145974317328,
+        "n": 175,
+        "rate": 0.8571428571428571
+      },
+      "recall": {
+        "hi": 1.0,
+        "k": 150,
+        "lo": 0.9750288608542812,
+        "n": 150,
+        "rate": 1.0
+      },
+      "tp": 150
+    },
+    "timeout": {
+      "fn": 0,
+      "fp": 0,
+      "precision": {
+        "hi": 1.0,
+        "k": 150,
+        "lo": 0.9750288608542812,
+        "n": 150,
+        "rate": 1.0
+      },
+      "recall": {
+        "hi": 1.0,
+        "k": 150,
+        "lo": 0.9750288608542812,
+        "n": 150,
+        "rate": 1.0
+      },
+      "tp": 150
+    },
+    "tool_error_loop": {
+      "fn": 0,
+      "fp": 9,
+      "precision": {
+        "hi": 0.9699383634745118,
+        "k": 150,
+        "lo": 0.8959337478287426,
+        "n": 159,
+        "rate": 0.9433962264150944
+      },
+      "recall": {
+        "hi": 1.0,
+        "k": 150,
+        "lo": 0.9750288608542812,
+        "n": 150,
+        "rate": 1.0
+      },
+      "tp": 150
+    },
+    "unknown_tool": {
+      "fn": 1,
+      "fp": 0,
+      "precision": {
+        "hi": 1.0,
+        "k": 149,
+        "lo": 0.9748654816489752,
+        "n": 149,
+        "rate": 1.0
+      },
+      "recall": {
+        "hi": 0.9988222289768665,
+        "k": 149,
+        "lo": 0.9632062470660241,
+        "n": 150,
+        "rate": 0.9933333333333333
+      },
+      "tp": 149
+    },
+    "wrong_tool": {
+      "fn": 45,
+      "fp": 0,
+      "precision": {
+        "hi": 1.0,
+        "k": 105,
+        "lo": 0.9647046717431569,
+        "n": 105,
+        "rate": 1.0
+      },
+      "recall": {
+        "hi": 0.7675928339119842,
+        "k": 105,
+        "lo": 0.6224187104297283,
+        "n": 150,
+        "rate": 0.7
+      },
+      "tp": 105
+    }
+  },
+  "clean_flagged": {
+    "hi": 0.04856596928817408,
+    "k": 11,
+    "lo": 0.015423476078524151,
+    "n": 400,
+    "rate": 0.0275
+  },
+  "clusters": {
+    "count": 425,
+    "findings": 1193,
+    "purity": {
+      "hi": 0.9752817653438524,
+      "k": 1153,
+      "lo": 0.9546658567976241,
+      "n": 1193,
+      "rate": 0.9664710813076278
+    }
+  },
+  "faulty_flagged": {
+    "hi": 0.9704195569543516,
+    "k": 1153,
+    "lo": 0.9483059630808423,
+    "n": 1200,
+    "rate": 0.9608333333333333
+  },
+  "meta": {
+    "clean_traces": 400,
+    "cores_used": 1,
+    "cost_usd": 0.0,
+    "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+    "cpus_allowed": 1,
+    "date": "2026-11-21",
+    "fault_mix": {
+      "budget_exhaustion": 150,
+      "context_overflow": 150,
+      "handoff_drop": 150,
+      "repeated_calls": 150,
+      "timeout": 150,
+      "tool_error_loop": 150,
+      "unknown_tool": 150,
+      "wrong_tool": 150
+    },
+    "fault_traces": 1200,
+    "model": "none (rule detectors, synthetic traces)",
+    "python": "3.11.18",
+    "seconds": 0.87,
+    "seed": 7,
+    "thresholds": {
+      "budget_exhaustion.ratio": 1.0,
+      "context_overflow.drop_ratio": 0.6,
+      "context_overflow.near_ratio": 0.85,
+      "repeated_calls.min_repeats": 3,
+      "timeout.ratio": 1.0,
+      "tool_error_loop.min_errors": 3,
+      "wrong_tool.min_offtask": 2
+    },
+    "tool": "tracefault 0.1.0rc1",
+    "traces": 1600,
+    "tune_seed": 1
+  }
+}
