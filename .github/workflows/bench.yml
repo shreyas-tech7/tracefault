@@ -1,0 +1,31 @@
+name: Benchmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      seed:
+        description: "Held-out seed for the benchmark (not 1, the tuning seed)"
+        default: "2026"
+
+permissions:
+  contents: read
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: astral-sh/setup-uv@v6
+      - run: ./init.sh
+      - name: Run the benchmark
+        env:
+          SEED: ${{ inputs.seed }}
+        run: .venv/bin/tracefault bench --seed "$SEED" --out "results/ci-seed$SEED.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bench-results
+          path: results/ci-seed*.json
