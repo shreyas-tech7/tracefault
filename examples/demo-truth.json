@@ -1,0 +1,25 @@
+{
+  "seed": 7,
+  "truth": {
+    "0285b86ce53935fd16ccd6b9ccc6c4ae": null,
+    "06081598a878e2f264d9b1ecb19dd8b7": null,
+    "13830d71939b53182e4e349d98729e7c": "wrong_tool",
+    "2d4f409454129039aa0929ba7cb76def": "budget_exhaustion",
+    "3ce9d97dcbee500fe7ee5fc324bdb2e1": "budget_exhaustion",
+    "4fd12aabfe228f219e9cb0eb53f16947": null,
+    "5e3eaa60c736ba80622598514f31c827": "handoff_drop",
+    "6fdf5924754ec21ef66b01d4921da2e0": "wrong_tool",
+    "766bb31ed04d259b3717bd5c2d6a9a5f": "tool_error_loop",
+    "85a6c844be645a80d5282639fa798b13": "unknown_tool",
+    "9e25f4983c028716eca5cf68f5a8250e": "unknown_tool",
+    "a3ff416d4a3baf69dad8199bfca8b6f3": null,
+    "b5cd02d1034539a70366c12fb15220c3": "context_overflow",
+    "b923e7b81726cd9bba602f26bf0661a5": "tool_error_loop",
+    "c94dbca3a0aac36098b2cc2bd8183194": "handoff_drop",
+    "d634d54a7dc843565f6ef306e13d6975": "context_overflow",
+    "e09ab022e0d3f2380c27c73a0d502577": "repeated_calls",
+    "ebf7c99c18fa6eb9eb2b67d8b081abd1": "timeout",
+    "edbd57da8cafe1f6151b9267f9ed2125": "timeout",
+    "fdd9e4a62bce19a285ed7361c5c8a4b5": "repeated_calls"
+  }
+}
