@@ -198,7 +198,7 @@
     "fault_traces": 1200,
     "model": "none (rule detectors, synthetic traces)",
     "python": "3.11.18",
-    "seconds": 0.89,
+    "seconds": 0.87,
     "seed": 7,
     "thresholds": {
       "budget_exhaustion.ratio": 1.0,

@@ -18,3 +18,5 @@ One line per choice: the options weighed and the reason.
 - 2026-11-21 The report holds no JavaScript and sets a Content Security Policy that blocks scripts, as a second guard behind escaping.
 - 2026-11-21 Terminal output escapes control characters, because a hostile trace could hold ANSI escapes.
 - 2026-11-21 Skills: install of third-party skills was denied by the permission system on the first try. The rules of ponytail, caveman and humanizer were followed by hand, as in the earlier builds.
+- 2026-11-21 Hostile input exits 2, never a traceback (options: catch every exception at the top, or reject each bad shape in the readers). The readers reject each bad shape with a message, so a real bug still shows as a traceback in tests instead of hiding behind a catch-all.
+- 2026-11-21 The bench refuses both the `--tune-seed` value and the seed recorded in `thresholds.json`, so a flag cannot sneak the tuning seed into the held-out numbers.

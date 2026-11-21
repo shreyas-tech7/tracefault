@@ -60,3 +60,11 @@ def test_report_has_waterfall_and_clusters():
     out = _report(b.build())
     assert out.count("<svg") == 1 and "<rect" in out and "Top failure clusters" in out
     assert TID in out
+
+
+def test_report_escapes_control_bytes():
+    b = B()
+    b.tool("get_weather", error="bad\x00\x1b[31m\x07")
+    t = b.build()
+    page = render([t], {t.trace_id: []}, {t.trace_id: measure(t, None)}, [], title="x\x1b")
+    assert not any(c in page for c in "\x00\x1b\x07")

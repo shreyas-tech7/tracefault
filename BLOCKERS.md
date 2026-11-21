@@ -26,3 +26,5 @@
 ## Bug triage log
 
 - Live bug, fixed: `context_overflow` crashed (zip strict) on a trace with no model calls. Found by the ANSI escape test. Score 3 x 4 = 12, fixed at once.
+- Live bug, fixed: three detectors crashed on odd attribute types (`finish_reasons` as a number, a tool definition whose name is a list, a required handoff field that is a list). Found in the release self review. Score 3 x 4 = 12, fixed at once with `test_odd_attribute_values_never_crash`.
+- Live bugs, fixed after the outside review: huge JSON integers, numbers too large for a float, non-finite times, malformed OTLP shapes (`scopeSpans` or `status` of the wrong type) and spans that end before they start crashed with a traceback (exit 1, which CI reads as findings) or slipped through. They now raise `InputError` and exit 2. A span that names itself as parent is a root. A handoff payload sent as a JSON object is read instead of flagged. The bench now also refuses the seed in `thresholds.json`. HTML escapes control bytes. Each fix has a test.

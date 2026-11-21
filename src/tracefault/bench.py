@@ -18,7 +18,7 @@ from pathlib import Path
 from . import __version__
 from .cluster import cluster
 from .convert import parse_text, to_jsonl, to_otlp
-from .detect import DEFAULTS, DETECTORS, scan
+from .detect import DEFAULTS, DETECTORS, scan, tuned_on_seed
 from .generate import FAULTS, generate
 from .model import Trace
 
@@ -118,8 +118,9 @@ def _cpu() -> str:
 def run_bench(
     seed: int, th: dict, n_per_fault: int = 150, n_clean: int = 400, tune_seed: int = TUNE_SEED
 ) -> dict:
-    if seed == tune_seed:
-        raise ValueError("the bench seed must differ from the tuning seed")
+    shipped = tuned_on_seed()
+    if seed in (tune_seed, shipped):
+        raise ValueError(f"seed {seed} was used for tuning, pick another bench seed")
     traces, truth = generate(n_per_fault, n_clean, seed)
     t0 = time.perf_counter()
     traces = roundtrip(traces)

@@ -101,13 +101,15 @@ Second check on seed 7 (file `results/second-seed7.json`), because several rows 
 Intervals are Wilson 95% score intervals over traces. A trace counts for a type when that detector fires anywhere in it.
 <!-- /gen:results -->
 
-The alert trade-off shows in two rows. `wrong_tool` waits for two calls outside the task list, because clean runs sometimes make one exploratory call. That keeps false alarms low and costs recall, since many planted wrong-tool runs make only one bad call. `repeated_calls` fires at three identical calls, so the rare clean run that polls a status three times becomes a false alarm.
+<!-- gen:tradeoff -->
+The alert trade-off shows in two rows. `wrong_tool` waits for 2 calls outside the task list, because clean runs sometimes make one exploratory call. That keeps false alarms low and costs recall, since many planted wrong-tool runs make only one bad call. `repeated_calls` fires at 3 identical calls, so the rare clean run that polls a status that often becomes a false alarm.
+<!-- /gen:tradeoff -->
 
 ## Cost per task
 
 <!-- gen:cost -->
 Cost per task: $0.00. tracefault calls no model and no API.
-The held-out bench (1600 traces, both converters, eight detectors and clustering) took 0.82 s on 1 core of an Intel(R) Xeon(R) Processor @ 2.10GHz (pinned with `taskset -c 0`), Python 3.11.18, on 2026-11-21. That is about 0.51 ms per trace.
+The held-out bench (1600 traces, both converters, eight detectors and clustering) took 0.83 s on 1 core of an Intel(R) Xeon(R) Processor @ 2.10GHz (pinned with `taskset -c 0`), Python 3.11.18, on 2026-11-21. That is about 0.52 ms per trace.
 <!-- /gen:cost -->
 
 ## Run it in 10 minutes

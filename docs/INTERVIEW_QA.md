@@ -10,7 +10,7 @@ Numbers from `results/final-seed2026.json` (seed 2026, 2026-11-21):
 - tool error loop precision: 150/154 = 97.4% (93.5 to 99.0)
 - clean traces flagged by any detector: 6/400 = 1.5% (0.7 to 3.2)
 - cluster purity: 1142/1172 = 97.4% (96.4 to 98.2) over 402 clusters
-- time per trace: about 0.51 ms on one core
+- time per trace: about 0.52 ms on one core
 <!-- /gen:qa -->
 
 **1. What does tracefault do, in one breath?**

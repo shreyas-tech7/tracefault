@@ -43,6 +43,16 @@ class Finding:
     message: str
 
 
+def tuned_on_seed() -> int | None:
+    """The seed the shipped thresholds were tuned on, from `thresholds.json`."""
+    try:
+        data = json.loads(resources.files("tracefault").joinpath("thresholds.json").read_text())
+    except (FileNotFoundError, json.JSONDecodeError):
+        return None
+    seed = data.get("tuned_on_seed")
+    return seed if isinstance(seed, int) else None
+
+
 def load_thresholds() -> dict[str, float]:
     """The shipped thresholds, falling back to the defaults for any missing key."""
     th = dict(DEFAULTS)
@@ -59,7 +69,7 @@ def _num(x) -> float | None:
         return None
     try:
         return float(x)
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):
         return None
 
 
@@ -118,7 +128,8 @@ def context_overflow(t: Trace, th: dict) -> list[Finding]:
     if not llms:
         return []
     for a, b in zip(llms, llms[1:] + [None], strict=True):
-        length = "length" in (a.attrs.get("gen_ai.response.finish_reasons") or [])
+        reasons = a.attrs.get("gen_ai.response.finish_reasons")
+        length = reasons == "length" or (isinstance(reasons, list) and "length" in reasons)
         dropped = b is not None and b.input_tokens < drop * a.input_tokens
         if limit:
             hit = a.input_tokens >= near * limit and (length or dropped)
@@ -210,8 +221,7 @@ def _available(t: Trace) -> set[str] | None:
     defs = t.conf("gen_ai.tool.definitions")
     if not isinstance(defs, list):
         return None
-    names = {d.get("name") for d in defs if isinstance(d, dict)}
-    return {n for n in names if isinstance(n, str)}
+    return {d["name"] for d in defs if isinstance(d, dict) and isinstance(d.get("name"), str)}
 
 
 def unknown_tool(t: Trace, th: dict) -> list[Finding]:
@@ -236,13 +246,16 @@ def handoff_drop(t: Trace, th: dict) -> list[Finding]:
         req = s.attrs.get("tracefault.handoff.required")
         if not isinstance(req, list):
             continue
-        try:
-            payload = json.loads(s.attrs.get("tracefault.handoff.payload", ""))
-        except (TypeError, ValueError, RecursionError):
-            payload = None
+        payload = s.attrs.get("tracefault.handoff.payload", "")
+        if not isinstance(payload, dict):
+            try:
+                payload = json.loads(payload)
+            except (TypeError, ValueError, RecursionError):
+                payload = None
         if not isinstance(payload, dict):
             return [Finding("handoff_drop", t.trace_id, s.span_id, "handoff payload is not a JSON object")]
-        missing = [f for f in req if payload.get(f) in (None, "")]
+        # A field name that is not a string can never be present in a JSON object.
+        missing = [f for f in req if not isinstance(f, str) or payload.get(f) in (None, "")]
         if missing:
             return [
                 Finding(

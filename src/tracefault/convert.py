@@ -12,6 +12,7 @@ Traces are untrusted input. Bad input raises `InputError` with the file and line
 from __future__ import annotations
 
 import json
+import math
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -20,6 +21,7 @@ from .model import AGENT, KINDS, LLM, OTHER, TOOL, Span, Trace
 
 MAX_BYTES = 200 * 1024 * 1024
 MAX_TEXT = 4000
+MAX_INT = 2**63 - 1
 
 OP_TO_KIND = {
     "chat": LLM,
@@ -56,14 +58,19 @@ def _int(v: Any, where: str) -> int:
         raise InputError(f"{where}: not a whole number: {_text(v)[:60]!r}") from e
     if n < 0:
         raise InputError(f"{where}: negative number {n}")
+    if n > MAX_INT:
+        raise InputError(f"{where}: number too large")
     return n
 
 
 def _float(v: Any, where: str) -> float:
     try:
-        return float(v)
-    except (TypeError, ValueError) as e:
+        x = float(v)
+    except (TypeError, ValueError, OverflowError) as e:
         raise InputError(f"{where}: not a number: {_text(v)[:60]!r}") from e
+    if not math.isfinite(x):
+        raise InputError(f"{where}: number is not finite: {_text(v)[:60]!r}")
+    return x
 
 
 # OTLP attribute values ------------------------------------------------------
@@ -110,9 +117,28 @@ def _attrs(items: Any, where: str) -> dict[str, Any]:
             raise InputError(f"{where}: attribute without a key")
         try:
             out[str(kv["key"])] = _value(kv.get("value", {}))
-        except (TypeError, ValueError, KeyError, AttributeError) as e:
+        except (TypeError, ValueError, KeyError, AttributeError, OverflowError) as e:
             raise InputError(f"{where}: bad value for attribute {kv['key']!r}") from e
     return out
+
+
+def _list(x: Any, where: str) -> list:
+    if x is None:
+        return []
+    if not isinstance(x, list):
+        raise InputError(f"{where} must be a list")
+    return x
+
+
+def _span(**kw: Any) -> Span:
+    """Build a span and check what every reader needs: end not before start, and a
+    span that names itself as parent is treated as a root."""
+    if kw["end"] < kw["start"]:
+        raise InputError(f"{kw.pop('where')}: span ends before it starts")
+    kw.pop("where")
+    if kw["parent_id"] == kw["span_id"]:
+        kw["parent_id"] = None
+    return Span(**kw)
 
 
 def spans_from_otlp(doc: dict, where: str = "otlp") -> list[Span]:
@@ -120,8 +146,10 @@ def spans_from_otlp(doc: dict, where: str = "otlp") -> list[Span]:
         raise InputError(f"{where}: no resourceSpans list")
     spans = []
     for rs in doc["resourceSpans"]:
-        for ss in (rs or {}).get("scopeSpans", []) or []:
-            for i, raw in enumerate((ss or {}).get("spans", []) or []):
+        scopes = _list(rs.get("scopeSpans") if isinstance(rs, dict) else None, f"{where}: scopeSpans")
+        for ss in scopes:
+            raws = _list(ss.get("spans") if isinstance(ss, dict) else None, f"{where}: spans")
+            for i, raw in enumerate(raws):
                 w = f"{where} span {i}"
                 if not isinstance(raw, dict):
                     raise InputError(f"{w}: not an object")
@@ -130,13 +158,16 @@ def spans_from_otlp(doc: dict, where: str = "otlp") -> list[Span]:
                         raise InputError(f"{w}: missing {k}")
                 a = _attrs(raw.get("attributes", []), w)
                 status = raw.get("status") or {}
+                if not isinstance(status, dict):
+                    raise InputError(f"{w}: status must be an object")
                 error = None
                 if status.get("code") in STATUS_ERROR:
                     error = _text(status.get("message") or a.get("error.type") or "error")
                 elif "error.type" in a:
                     error = _text(a["error.type"])
                 spans.append(
-                    Span(
+                    _span(
+                        where=w,
                         trace_id=_text(raw["traceId"]),
                         span_id=_text(raw["spanId"]),
                         parent_id=_text(raw["parentSpanId"]) if raw.get("parentSpanId") else None,
@@ -167,7 +198,8 @@ def span_from_jsonl(obj: dict, where: str) -> Span:
     if not isinstance(attrs, dict):
         raise InputError(f"{where}: attrs must be an object")
     err = obj.get("error")
-    return Span(
+    return _span(
+        where=where,
         trace_id=_text(obj["trace_id"]),
         span_id=_text(obj["span_id"]),
         parent_id=_text(obj["parent_id"]) if obj.get("parent_id") else None,
@@ -198,7 +230,7 @@ def parse_text(text: str, where: str = "input", fmt: str = "auto") -> list[Trace
     if fmt in ("auto", "otlp"):
         try:
             doc = json.loads(stripped)
-        except (json.JSONDecodeError, RecursionError):
+        except (ValueError, RecursionError):
             doc = None
         if isinstance(doc, dict) and "resourceSpans" in doc:
             return group(spans_from_otlp(doc, where))
@@ -211,7 +243,7 @@ def parse_text(text: str, where: str = "input", fmt: str = "auto") -> list[Trace
         w = f"{where}:{n}"
         try:
             obj = json.loads(line)
-        except (json.JSONDecodeError, RecursionError) as e:
+        except (ValueError, RecursionError) as e:
             raise InputError(f"{w}: not valid JSON") from e
         if isinstance(obj, dict) and "resourceSpans" in obj:
             spans += spans_from_otlp(obj, w)

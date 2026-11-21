@@ -206,3 +206,64 @@ def test_generated_fault_is_found(kind):
     traces, truth = generate(8, 0, seed=11)
     hits = [bool(DETECTORS[kind](t, TH)) for t in traces if truth[t.trace_id] == kind]
     assert sum(hits) >= 4, hits
+
+
+ODD = [
+    5,
+    -1,
+    "x",
+    None,
+    True,
+    1e308,
+    float("nan"),
+    [["a"]],
+    [{"a": 1}],
+    [{"name": ["a"]}],
+    {"name": ["a"]},
+    [1, None],
+]
+KEYS = [
+    "tracefault.context_limit",
+    "tracefault.budget_tokens",
+    "tracefault.timeout_s",
+    "tracefault.tools.allowed",
+    "gen_ai.tool.definitions",
+    "tracefault.handoff.required",
+    "tracefault.handoff.payload",
+    "gen_ai.response.finish_reasons",
+    "gen_ai.tool.call.arguments",
+    "error.type",
+]
+
+
+@pytest.mark.parametrize("key", KEYS)
+def test_odd_attribute_values_never_crash(key):
+    """Broken case: a hostile trace puts a list, a number or NaN where a string or list
+    belongs. Every detector, the metrics and the report must still run."""
+    from tracefault.cluster import cluster
+    from tracefault.metrics import measure
+    from tracefault.report import render
+
+    for v in ODD:
+        b = B()
+        b.llm()
+        b.tool("get_weather")
+        b.llm()
+        t = b.build()
+        for s in t.spans:
+            s.attrs[key] = v
+        fs = scan(t, dict(DEFAULTS))
+        m = measure(t, None)
+        render([t], {t.trace_id: fs}, {t.trace_id: m}, cluster([(t, f) for f in fs]), title="odd")
+
+
+def test_handoff_payload_given_as_an_object_is_read():
+    """Broken case: a payload sent as a JSON object, not a string, was a false alarm."""
+    b = B()
+    b.llm()
+    t = b.build()
+    t.spans[0].attrs["tracefault.handoff.required"] = ["order_id"]
+    t.spans[0].attrs["tracefault.handoff.payload"] = {"order_id": "A1"}
+    assert not fired(t, "handoff_drop")
+    t.spans[0].attrs["tracefault.handoff.payload"] = {"order_id": ""}
+    assert fired(t, "handoff_drop")

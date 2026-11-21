@@ -25,6 +25,8 @@ def esc(x: object, limit: int = 300) -> str:
     s = str(x)
     if len(s) > limit:
         s = s[:limit] + "..."
+    # Control bytes (NUL, ESC, BEL) are shown as escapes, as in the terminal output.
+    s = "".join(c if c.isprintable() or c in "\n\t" else repr(c)[1:-1] for c in s)
     return html.escape(s, quote=True)
 
 

@@ -133,7 +133,15 @@ def blocks(root: Path) -> dict[str, str]:
         f"of the budget (`CLEAN_SPEND_MAX`). About {100 * MISSING_P:.0f} percent of traces leave out one declared "
         "limit (`MISSING_P`). Both live in `src/tracefault/generate.py`. They are settings, not results."
     )
+    tradeoff = (
+        f"The alert trade-off shows in two rows. `wrong_tool` waits for {th['wrong_tool.min_offtask']:g} calls outside "
+        "the task list, because clean runs sometimes make one exploratory call. That keeps false alarms low and "
+        "costs recall, since many planted wrong-tool runs make only one bad call. `repeated_calls` fires at "
+        f"{th['repeated_calls.min_repeats']:g} identical calls, so the rare clean run that polls a status that "
+        "often becomes a false alarm."
+    )
     return {
+        "tradeoff": tradeoff,
         "noise": noise,
         "status": status,
         "results": results,
@@ -215,4 +223,4 @@ def write(root: Path, check: bool = False) -> list[str]:
     return stale
 
 
-BLOCK_NAMES = ("status", "results", "cost", "rules", "otel", "noise")
+BLOCK_NAMES = ("status", "results", "cost", "rules", "otel", "noise", "tradeoff")

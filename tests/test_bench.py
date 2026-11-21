@@ -66,3 +66,9 @@ def test_final_results_use_a_held_out_seed():
     assert res["meta"]["seed"] != res["meta"]["tune_seed"] == TUNE_SEED
     assert res["meta"]["traces"] >= 1000
     assert res["meta"]["thresholds"] == load_thresholds()
+
+
+def test_bench_refuses_the_shipped_tuning_seed_even_with_another_flag():
+    """Broken case: `--tune-seed 2` let a bench run on seed 1, the seed in thresholds.json."""
+    with pytest.raises(ValueError):
+        run_bench(TUNE_SEED, load_thresholds(), 1, 1, tune_seed=TUNE_SEED + 1)

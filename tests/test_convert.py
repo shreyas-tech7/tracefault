@@ -83,3 +83,89 @@ def test_unreadable_file(tmp_path):
     p.write_bytes(b"\xff\xfe\x00bad")
     with pytest.raises(InputError, match="cannot read"):
         load(p)
+
+
+def _line(**k):
+    base = {"trace_id": "t", "span_id": "r", "kind": "agent", "name": "root", "start": 0, "end": 1}
+    base.update(k)
+    return json.dumps(base)
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        _line()
+        + "\n"
+        + '{"trace_id": "t", "span_id": "a", "start": 0, "end": 1, "input_tokens": '
+        + "9" * 5000
+        + "}",
+        _line(input_tokens=10**40),
+        _line(start="NaN"),
+        _line(end="Infinity"),
+        _line(start=5, end=1),
+        json.dumps({"resourceSpans": [{"scopeSpans": "x"}]}),
+        json.dumps({"resourceSpans": [{"scopeSpans": [{"spans": {"a": 1}}]}]}),
+        json.dumps(
+            {
+                "resourceSpans": [
+                    {
+                        "scopeSpans": [
+                            {
+                                "spans": [
+                                    {
+                                        "traceId": "t",
+                                        "spanId": "s",
+                                        "startTimeUnixNano": "9" * 400,
+                                        "endTimeUnixNano": "9" * 400,
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ),
+        json.dumps(
+            {
+                "resourceSpans": [
+                    {
+                        "scopeSpans": [
+                            {
+                                "spans": [
+                                    {
+                                        "traceId": "t",
+                                        "spanId": "s",
+                                        "startTimeUnixNano": "1",
+                                        "endTimeUnixNano": "2",
+                                        "status": "bad",
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ),
+    ],
+    ids=[
+        "huge-int",
+        "huge-tokens",
+        "nan-start",
+        "inf-end",
+        "end-before-start",
+        "scopes-str",
+        "spans-obj",
+        "huge-time",
+        "status-str",
+    ],
+)
+def test_hostile_shapes_raise_input_error(text):
+    """Broken case: a value that Python cannot hold as a float, or a wrong JSON shape,
+    used to end in a traceback (exit 1, read by CI as findings) instead of exit 2."""
+    with pytest.raises(InputError):
+        parse_text(text)
+
+
+def test_span_that_names_itself_as_parent_is_a_root():
+    (t,) = parse_text(_line(parent_id="r"))
+    assert t.root.parent_id is None and t.children("r") == []
