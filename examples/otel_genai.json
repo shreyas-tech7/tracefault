@@ -1,0 +1,161 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          { "key": "service.name", "value": { "stringValue": "weather-demo" } }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": { "name": "hand-written example" },
+          "spans": [
+            {
+              "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+              "spanId": "00f067aa0ba90201",
+              "name": "invoke_agent weather_agent",
+              "kind": 1,
+              "startTimeUnixNano": "1767225600000000000",
+              "endTimeUnixNano": "1767225609500000000",
+              "attributes": [
+                { "key": "gen_ai.operation.name", "value": { "stringValue": "invoke_agent" } },
+                { "key": "gen_ai.agent.name", "value": { "stringValue": "weather_agent" } },
+                { "key": "gen_ai.request.model", "value": { "stringValue": "synthetic-model" } },
+                { "key": "tracefault.task", "value": { "stringValue": "weather" } },
+                { "key": "tracefault.tools.allowed", "value": { "arrayValue": { "values": [
+                  { "stringValue": "get_weather" }, { "stringValue": "geocode" } ] } } },
+                { "key": "gen_ai.tool.definitions", "value": { "arrayValue": { "values": [
+                  { "kvlistValue": { "values": [
+                    { "key": "type", "value": { "stringValue": "function" } },
+                    { "key": "name", "value": { "stringValue": "get_weather" } } ] } },
+                  { "kvlistValue": { "values": [
+                    { "key": "type", "value": { "stringValue": "function" } },
+                    { "key": "name", "value": { "stringValue": "geocode" } } ] } } ] } } },
+                { "key": "tracefault.context_limit", "value": { "intValue": "8192" } },
+                { "key": "tracefault.budget_tokens", "value": { "intValue": "20000" } },
+                { "key": "tracefault.timeout_s", "value": { "doubleValue": 30.0 } }
+              ],
+              "status": { "code": 1 }
+            },
+            {
+              "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+              "spanId": "00f067aa0ba90202",
+              "parentSpanId": "00f067aa0ba90201",
+              "name": "chat synthetic-model",
+              "kind": 3,
+              "startTimeUnixNano": "1767225600250000000",
+              "endTimeUnixNano": "1767225601500000000",
+              "attributes": [
+                { "key": "gen_ai.operation.name", "value": { "stringValue": "chat" } },
+                { "key": "gen_ai.request.model", "value": { "stringValue": "synthetic-model" } },
+                { "key": "gen_ai.usage.input_tokens", "value": { "intValue": "1200" } },
+                { "key": "gen_ai.usage.output_tokens", "value": { "intValue": "80" } },
+                { "key": "gen_ai.response.finish_reasons", "value": { "arrayValue": { "values": [ { "stringValue": "tool_call" } ] } } }
+              ],
+              "status": { "code": 1 }
+            },
+            {
+              "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+              "spanId": "00f067aa0ba90203",
+              "parentSpanId": "00f067aa0ba90201",
+              "name": "execute_tool get_weather",
+              "kind": 3,
+              "startTimeUnixNano": "1767225601500000000",
+              "endTimeUnixNano": "1767225601750000000",
+              "attributes": [
+                { "key": "gen_ai.operation.name", "value": { "stringValue": "execute_tool" } },
+                { "key": "gen_ai.tool.name", "value": { "stringValue": "get_weather" } },
+                { "key": "gen_ai.tool.call.arguments", "value": { "stringValue": "{\"city\": \"Austin\"}" } },
+                { "key": "error.type", "value": { "stringValue": "503" } }
+              ],
+              "status": { "code": 2, "message": "ConnectionError: upstream returned 503" }
+            },
+            {
+              "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+              "spanId": "00f067aa0ba90204",
+              "parentSpanId": "00f067aa0ba90201",
+              "name": "chat synthetic-model",
+              "kind": 3,
+              "startTimeUnixNano": "1767225602000000000",
+              "endTimeUnixNano": "1767225603250000000",
+              "attributes": [
+                { "key": "gen_ai.operation.name", "value": { "stringValue": "chat" } },
+                { "key": "gen_ai.request.model", "value": { "stringValue": "synthetic-model" } },
+                { "key": "gen_ai.usage.input_tokens", "value": { "intValue": "1320" } },
+                { "key": "gen_ai.usage.output_tokens", "value": { "intValue": "60" } },
+                { "key": "gen_ai.response.finish_reasons", "value": { "arrayValue": { "values": [ { "stringValue": "tool_call" } ] } } }
+              ],
+              "status": { "code": 1 }
+            },
+            {
+              "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+              "spanId": "00f067aa0ba90205",
+              "parentSpanId": "00f067aa0ba90201",
+              "name": "execute_tool get_weather",
+              "kind": 3,
+              "startTimeUnixNano": "1767225603250000000",
+              "endTimeUnixNano": "1767225603500000000",
+              "attributes": [
+                { "key": "gen_ai.operation.name", "value": { "stringValue": "execute_tool" } },
+                { "key": "gen_ai.tool.name", "value": { "stringValue": "get_weather" } },
+                { "key": "gen_ai.tool.call.arguments", "value": { "stringValue": "{\"city\": \"Austin\"}" } },
+                { "key": "error.type", "value": { "stringValue": "503" } }
+              ],
+              "status": { "code": 2, "message": "ConnectionError: upstream returned 503" }
+            },
+            {
+              "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+              "spanId": "00f067aa0ba90206",
+              "parentSpanId": "00f067aa0ba90201",
+              "name": "chat synthetic-model",
+              "kind": 3,
+              "startTimeUnixNano": "1767225603750000000",
+              "endTimeUnixNano": "1767225605000000000",
+              "attributes": [
+                { "key": "gen_ai.operation.name", "value": { "stringValue": "chat" } },
+                { "key": "gen_ai.request.model", "value": { "stringValue": "synthetic-model" } },
+                { "key": "gen_ai.usage.input_tokens", "value": { "intValue": "1420" } },
+                { "key": "gen_ai.usage.output_tokens", "value": { "intValue": "60" } },
+                { "key": "gen_ai.response.finish_reasons", "value": { "arrayValue": { "values": [ { "stringValue": "tool_call" } ] } } }
+              ],
+              "status": { "code": 1 }
+            },
+            {
+              "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+              "spanId": "00f067aa0ba90207",
+              "parentSpanId": "00f067aa0ba90201",
+              "name": "execute_tool get_weather",
+              "kind": 3,
+              "startTimeUnixNano": "1767225605000000000",
+              "endTimeUnixNano": "1767225605250000000",
+              "attributes": [
+                { "key": "gen_ai.operation.name", "value": { "stringValue": "execute_tool" } },
+                { "key": "gen_ai.tool.name", "value": { "stringValue": "get_weather" } },
+                { "key": "gen_ai.tool.call.arguments", "value": { "stringValue": "{\"city\": \"Austin\"}" } },
+                { "key": "error.type", "value": { "stringValue": "503" } }
+              ],
+              "status": { "code": 2, "message": "ConnectionError: upstream returned 503" }
+            },
+            {
+              "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+              "spanId": "00f067aa0ba90208",
+              "parentSpanId": "00f067aa0ba90201",
+              "name": "chat synthetic-model",
+              "kind": 3,
+              "startTimeUnixNano": "1767225605500000000",
+              "endTimeUnixNano": "1767225609250000000",
+              "attributes": [
+                { "key": "gen_ai.operation.name", "value": { "stringValue": "chat" } },
+                { "key": "gen_ai.request.model", "value": { "stringValue": "synthetic-model" } },
+                { "key": "gen_ai.usage.input_tokens", "value": { "intValue": "1520" } },
+                { "key": "gen_ai.usage.output_tokens", "value": { "intValue": "120" } },
+                { "key": "gen_ai.response.finish_reasons", "value": { "arrayValue": { "values": [ { "stringValue": "stop" } ] } } }
+              ],
+              "status": { "code": 1 }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
