@@ -74,7 +74,7 @@ def _prose(path: Path) -> str:
     return CODE.sub("", FENCE.sub("", path.read_text(encoding="utf-8")))
 
 
-DOCS = [ROOT / "README.md", ROOT / "CONTRIBUTING.md", ROOT / "docs" / "handoff" / "COWORK_PROMPT.md"] + [
+DOCS = [ROOT / "README.md", ROOT / "CONTRIBUTING.md"] + [
     p for p in sorted((ROOT / "docs").glob("*.md")) if p.name not in {"DEMO.md"}
 ]
 
@@ -109,7 +109,6 @@ def test_ship_files():
         "docs/WALKTHROUGH.md",
         "docs/INTERVIEW_QA.md",
         "docs/HUMAN_STEPS.md",
-        "docs/handoff/COWORK_PROMPT.md",
         "docs/build/BUILD_PROMPT.md",
         "examples/otel_genai.json",
         "examples/simple.jsonl",

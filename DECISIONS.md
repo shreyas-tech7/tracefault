@@ -4,7 +4,7 @@ One line per choice: the options weighed and the reason.
 
 - 2026-11-21 Name: `tracefault` (options tracefault, loopwatch). PyPI and npm both answer 404 for tracefault on 2026-11-21, and the repo already has that name.
 - 2026-11-21 Branch: `claude/project-thread-n3u3hh` (options claude/build-tracefault from the brief, or the branch the session allows). The session only allows pushes to claude/project-thread-n3u3hh, and the brief says to use the allowed branch and log it.
-- 2026-11-21 Checkout: `/home/user/tracefault` (options ~/work/tracefault, the existing checkout). The session already cloned origin there with main at the README commit, so a second clone adds nothing.
+- 2026-11-21 Checkout: the build session's existing clone (other option: a second clone). The session already cloned origin there with main at the README commit, so a second clone adds nothing.
 - 2026-11-21 Stack: standard library only (options pydantic, opentelemetry-proto). The brief names only the standard library and pytest. JSON parsing needs nothing more.
 - 2026-11-21 OTel pin: semantic-conventions-genai main branch docs fetched 2026-11-21 (gen-ai-spans.md sha256 d5903bcc..., gen-ai-agent-spans.md sha256 0d2db04d...). The GitHub API for that repo is closed to this session, so the commit SHA is not known. The date and file hashes stand in.
 - 2026-11-21 Limits live in tracefault's own attributes (`tracefault.context_limit`, `tracefault.budget_tokens`, `tracefault.timeout_s`, `tracefault.tools.allowed`, `tracefault.handoff.*`) because the GenAI conventions define no limit attributes. Available tools come from the convention's `gen_ai.tool.definitions`.
