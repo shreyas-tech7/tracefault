@@ -52,9 +52,8 @@ tracefault reads trace files. A trace is the record of one agent run. It turns e
 - `docs/DEMO.md` is a real terminal session.
 - `docs/INTERVIEW_QA.md` has questions and answers for interviews.
 - `docs/HUMAN_STEPS.md` lists what only Shreyas can do.
-- `docs/handoff/COWORK_PROMPT.md` is a prompt for Claude Cowork.
 - `docs/build/BUILD_PROMPT.md` is the brief this repo was built from.
-- `docs/PLAN.md`, `docs/TOOLING.md`, `docs/ENVIRONMENT.md` and `docs/RELEASE_CHECK.md` record how the build went.
+- `docs/PLAN.md`, `docs/ENVIRONMENT.md` and `docs/RELEASE_CHECK.md` record how the build went.
 - `scripts/check_links.py` checks every relative link.
 - `scripts/make_social_preview.py` draws `docs/social-preview.png` with no image library.
 - `init.sh` sets up and tests everything in one command.

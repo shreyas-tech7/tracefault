@@ -25,7 +25,7 @@ Passed on 2026-11-21 (all tests, ruff, format, link check). CI on GitHub passed 
 ## Exact commands to resume
 
 ```bash
-cd /home/user/tracefault   # or a fresh clone of shreyas-tech7/tracefault
+cd tracefault   # the local clone of shreyas-tech7/tracefault
 git fetch origin && git checkout claude/project-thread-n3u3hh
 ./init.sh
 .venv/bin/tracefault readme --check
